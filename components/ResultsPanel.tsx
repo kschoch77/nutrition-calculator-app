@@ -44,7 +44,7 @@ function MacroCard({
               {fmtInt(data.proteinG)}g
             </div>
             <div className="text-xs text-gray-600 tabular-nums">
-              {fmtInt(proteinCals)} kcal • {pct(proteinCals)}%
+              {fmtInt(proteinCals)} kcal - {pct(proteinCals)}%
             </div>
           </div>
 
@@ -54,7 +54,7 @@ function MacroCard({
               {fmtInt(data.fatG)}g
             </div>
             <div className="text-xs text-gray-600 tabular-nums">
-              {fmtInt(fatCals)} kcal • {pct(fatCals)}%
+              {fmtInt(fatCals)} kcal - {pct(fatCals)}%
             </div>
           </div>
 
@@ -64,84 +64,11 @@ function MacroCard({
               {fmtInt(data.carbsG)}g
             </div>
             <div className="text-xs text-gray-600 tabular-nums">
-              {fmtInt(carbsCals)} kcal • {pct(carbsCals)}%
+              {fmtInt(carbsCals)} kcal - {pct(carbsCals)}%
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function AdvancedBmr({
-  results,
-  open,
-  onToggle,
-}: {
-  results: Results;
-  open: boolean;
-  onToggle: () => void;
-}) {
-  const m = results.bmr.methods;
-
-  return (
-    <div className="rounded-2xl border p-4">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h3 className="text-base font-semibold">BMR & TDEE</h3>
-          <p className="mt-1 text-xs text-gray-600">
-            Recommended BMR follows your rule:
-            BF% known → Katch-McArdle, unknown → avg(Mifflin + Revised HB).
-          </p>
-        </div>
-
-        <button
-          className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50"
-          onClick={onToggle}
-          type="button"
-        >
-          {open ? "Hide" : "Show"} formulas
-        </button>
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl bg-gray-50 p-3">
-          <div className="text-xs text-gray-600">Recommended BMR</div>
-          <div className="mt-1 text-xl font-semibold tabular-nums">
-            {fmtInt(results.bmr.recommendedBmr)} kcal
-          </div>
-        </div>
-
-        <div className="rounded-xl bg-gray-50 p-3">
-          <div className="text-xs text-gray-600">TDEE</div>
-          <div className="mt-1 text-xl font-semibold tabular-nums">
-            {fmtInt(results.tdee)} kcal
-          </div>
-        </div>
-      </div>
-
-      {open && (
-        <div className="mt-4 space-y-2">
-          <div className="text-sm font-medium">All BMR formulas</div>
-          <div className="space-y-2">
-            <StatRow label="Mifflin–St Jeor" value={`${fmtMaybeInt(m.mifflin)} kcal`} />
-            <StatRow
-              label="Revised Harris-Benedict"
-              value={`${fmtMaybeInt(m.revisedHarrisBenedict)} kcal`}
-            />
-            <StatRow
-              label="Katch–McArdle"
-              value={`${fmtMaybeInt(m.katchMcArdle)} kcal`}
-            />
-            <StatRow label="Nelson" value={`${fmtMaybeInt(m.nelson)} kcal`} />
-            <StatRow label="Muller" value={`${fmtMaybeInt(m.muller)} kcal`} />
-          </div>
-
-          <p className="mt-2 text-xs text-gray-600">
-            Note: Nelson/Muller require FM & FFM (from BF% or DEXA).
-          </p>
-        </div>
-      )}
     </div>
   );
 }
@@ -152,7 +79,7 @@ export function ResultsPanel({
   results: Results;
 }) {
   // local UI state inside component is fine for this
-  // but we’ll keep it simple: controlled by HTML <details> pattern
+  // but we'll keep it simple: controlled by HTML <details> pattern
   return (
     <div className="space-y-6">
       {results.warnings.length > 0 && (
@@ -181,7 +108,7 @@ export function ResultsPanel({
         </summary>
 
         <div className="mt-3">
-          {/* We can’t store state in <details> easily; this shows formulas always in expanded mode.
+          {/* We can't store state in <details> easily; this shows formulas always in expanded mode.
               If you want a separate "show formulas" toggle, we can do that next. */}
           <div className="rounded-2xl border p-4">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -204,7 +131,7 @@ export function ResultsPanel({
               <div className="text-sm font-medium">All BMR formulas</div>
               <div className="space-y-2">
                 <StatRow
-                  label="Mifflin–St Jeor"
+                  label="Mifflin-St Jeor"
                   value={`${fmtMaybeInt(results.bmr.methods.mifflin)} kcal`}
                 />
                 <StatRow
@@ -212,7 +139,7 @@ export function ResultsPanel({
                   value={`${fmtMaybeInt(results.bmr.methods.revisedHarrisBenedict)} kcal`}
                 />
                 <StatRow
-                  label="Katch–McArdle"
+                  label="Katch-McArdle"
                   value={`${fmtMaybeInt(results.bmr.methods.katchMcArdle)} kcal`}
                 />
                 <StatRow

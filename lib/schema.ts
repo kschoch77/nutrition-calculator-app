@@ -90,7 +90,7 @@ export const profileFormSchema = z
       if (val.bodyFatPercent == null || !Number.isFinite(val.bodyFatPercent)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Body fat % is required when you choose “I know my BF%”",
+          message: "Body fat % is required when you choose \"I know my BF%\"",
           path: ["bodyFatPercent"],
         });
       }

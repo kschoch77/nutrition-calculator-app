@@ -43,12 +43,12 @@ export default function Home() {
               </p>
             ) : !results ? (
               <p className="mt-2 text-sm text-gray-600">
-                Calculation engine not implemented yet — next step.
+                Calculation engine not implemented yet - next step.
               </p>
             ) : (
-              <pre className="mt-3 overflow-auto rounded-xl bg-gray-50 p-3 text-xs">
-                {JSON.stringify(results, null, 2)}
-              </pre>
+              <div className="mt-3">
+                <ResultsPanel results={results} />
+              </div>
             )}
 
             {input && (

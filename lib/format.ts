@@ -1,9 +1,9 @@
 export function fmtInt(n: number): string {
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "n/a";
   return Math.round(n).toLocaleString();
 }
 
 export function fmtMaybeInt(n?: number): string {
-  if (n == null || !Number.isFinite(n)) return "—";
+  if (n == null || !Number.isFinite(n)) return "n/a";
   return Math.round(n).toLocaleString();
 }

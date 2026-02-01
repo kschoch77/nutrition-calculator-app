@@ -199,7 +199,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               className="w-full rounded-xl border px-3 py-2"
               {...register("bodyFatMode")}
             >
-              <option value="unknown">I don’t know my BF%</option>
+              <option value="unknown">I don't know my BF%</option>
               <option value="known">I know my BF%</option>
             </select>
             <FieldError name="bodyFatMode" />
@@ -230,7 +230,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
             </label>
           ) : (
             <div className="text-sm text-gray-600">
-              We’ll use the average of Revised Harris-Benedict and Mifflin-St Jeor for BMR.
+              We'll use the average of Revised Harris-Benedict and Mifflin-St Jeor for BMR.
             </div>
           )}
         </div>
@@ -265,7 +265,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
             </label>
 
             <p className="sm:col-span-2 text-xs text-gray-600">
-              If enabled, we’ll use these to compute FM/FFM and show Nelson/Muller (Advanced).
+              If enabled, we'll use these to compute FM/FFM and show Nelson/Muller (Advanced).
             </p>
           </div>
         )}
@@ -352,7 +352,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
       <div className="rounded-2xl border p-4 text-sm">
         <div className="font-medium">Form status</div>
         <div className="mt-1 text-gray-600">
-          {isValid ? "✅ Valid inputs (calculations will run)" : "⚠️ Fix errors above to run calculations"}
+          {isValid ? "Valid inputs (calculations will run)" : "Fix errors above to run calculations"}
         </div>
       </div>
     </form>
