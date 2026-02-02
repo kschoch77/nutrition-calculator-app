@@ -131,7 +131,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               className="w-full rounded-xl border px-3 py-2"
               type="number"
               step="1"
-              {...register("ageYears")}
+              {...register("ageYears", { valueAsNumber: true })}
             />
             <FieldError name="ageYears" />
           </label>
@@ -144,7 +144,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                   className="w-full rounded-xl border px-3 py-2"
                   type="number"
                   step="0.1"
-                  {...register("heightInches")}
+                  {...register("heightInches", { valueAsNumber: true })}
                 />
                 <FieldError name="heightInches" />
               </label>
@@ -155,7 +155,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                   className="w-full rounded-xl border px-3 py-2"
                   type="number"
                   step="0.1"
-                  {...register("weightLb")}
+                  {...register("weightLb", { valueAsNumber: true })}
                 />
                 <FieldError name="weightLb" />
               </label>
@@ -168,7 +168,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                   className="w-full rounded-xl border px-3 py-2"
                   type="number"
                   step="0.1"
-                  {...register("heightCm")}
+                  {...register("heightCm", { valueAsNumber: true })}
                 />
                 <FieldError name="heightCm" />
               </label>
@@ -179,7 +179,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                   className="w-full rounded-xl border px-3 py-2"
                   type="number"
                   step="0.1"
-                  {...register("weightKg")}
+                  {...register("weightKg", { valueAsNumber: true })}
                 />
                 <FieldError name="weightKg" />
               </label>
@@ -212,7 +212,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                 className="w-full rounded-xl border px-3 py-2"
                 type="number"
                 step="0.1"
-                {...register("bodyFatPercent")}
+                {...register("bodyFatPercent", { valueAsNumber: true })}
                 onBlur={(e) => {
                   const raw = Number(e.target.value);
                   if (Number.isFinite(raw)) {
@@ -248,7 +248,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                 className="w-full rounded-xl border px-3 py-2"
                 type="number"
                 step="0.1"
-                {...register("dexaFatMassKg")}
+                {...register("dexaFatMassKg", { valueAsNumber: true })}
               />
               <FieldError name="dexaFatMassKg" />
             </label>
@@ -259,7 +259,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                 className="w-full rounded-xl border px-3 py-2"
                 type="number"
                 step="0.1"
-                {...register("dexaLeanMassKg")}
+                {...register("dexaLeanMassKg", { valueAsNumber: true })}
               />
               <FieldError name="dexaLeanMassKg" />
             </label>
@@ -281,7 +281,9 @@ export function ProfileForm({ initialValues, onChange }: Props) {
             <select
               className="w-full rounded-xl border px-3 py-2"
               disabled={activityUseCustom}
-              {...register("activityPreset")}
+              {...register("activityPreset", {
+                setValueAs: (value) => (value === "" ? undefined : Number(value)),
+              })}
             >
               {ACTIVITY_PRESETS.map((p) => (
                 <option key={p.value} value={p.value}>
@@ -305,7 +307,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
                   className="w-full rounded-xl border px-3 py-2"
                   type="number"
                   step="0.01"
-                  {...register("activityCustom")}
+                  {...register("activityCustom", { valueAsNumber: true })}
                 />
                 <FieldError name="activityCustom" />
               </label>
@@ -321,28 +323,56 @@ export function ProfileForm({ initialValues, onChange }: Props) {
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="space-y-1">
             <div className="text-sm font-medium">Cut delta (kcal/day)</div>
-            <input className="w-full" type="range" min={-1000} max={0} step={25} {...register("cutDelta")} />
+            <input
+              className="w-full"
+              type="range"
+              min={-1000}
+              max={0}
+              step={25}
+              {...register("cutDelta", { valueAsNumber: true })}
+            />
             <div className="text-xs text-gray-600">{watch("cutDelta")} kcal/day</div>
             <FieldError name="cutDelta" />
           </label>
 
           <label className="space-y-1">
             <div className="text-sm font-medium">Bulk delta (kcal/day)</div>
-            <input className="w-full" type="range" min={0} max={1000} step={25} {...register("bulkDelta")} />
+            <input
+              className="w-full"
+              type="range"
+              min={0}
+              max={1000}
+              step={25}
+              {...register("bulkDelta", { valueAsNumber: true })}
+            />
             <div className="text-xs text-gray-600">{watch("bulkDelta")} kcal/day</div>
             <FieldError name="bulkDelta" />
           </label>
 
           <label className="space-y-1">
             <div className="text-sm font-medium">Recomp delta (kcal/day)</div>
-            <input className="w-full" type="range" min={-500} max={250} step={25} {...register("recompDelta")} />
+            <input
+              className="w-full"
+              type="range"
+              min={-500}
+              max={250}
+              step={25}
+              {...register("recompDelta", { valueAsNumber: true })}
+            />
             <div className="text-xs text-gray-600">{watch("recompDelta")} kcal/day</div>
             <FieldError name="recompDelta" />
           </label>
 
           <label className="space-y-1">
             <div className="text-sm font-medium">Bulk protein target (g/lb)</div>
-            <input className="w-full" type="range" min={0.7} max={1.0} step={0.05} {...register("bulkProteinGPerLb")} />
+            <input
+              className="w-full"
+              type="range"
+              min={0.7}
+              max={1.0}
+              step={0.05}
+              {...register("bulkProteinGPerLb", { valueAsNumber: true })}
+            />
             <div className="text-xs text-gray-600">{Number(watch("bulkProteinGPerLb")).toFixed(2)} g/lb</div>
             <FieldError name="bulkProteinGPerLb" />
           </label>
