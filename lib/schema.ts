@@ -29,10 +29,14 @@ export const profileFormSchema = z
     ageYears: z.coerce.number().int().positive("Age must be a positive whole number"),
 
     // Height/weight are split by unit system; we validate depending on selected unit
-    heightInches: z.coerce.number().optional(),
-    heightCm: z.coerce.number().optional(),
-    weightLb: z.coerce.number().optional(),
-    weightKg: z.coerce.number().optional(),
+    height: z.object({
+      inches: z.coerce.number().optional(),
+      cm: z.coerce.number().optional(),
+    }),
+    weight: z.object({
+      lb: z.coerce.number().optional(),
+      kg: z.coerce.number().optional(),
+    }),
 
     bodyFatMode: z.enum(["known", "unknown"]),
     bodyFatPercent: z.coerce.number().optional(),
@@ -54,33 +58,33 @@ export const profileFormSchema = z
   .superRefine((val, ctx) => {
     // Unit-dependent required fields
     if (val.unitSystem === "us") {
-      if (!val.heightInches || val.heightInches <= 0) {
+      if (!val.height.inches || val.height.inches <= 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Height (inches) is required",
-          path: ["heightInches"],
+          path: ["height", "inches"],
         });
       }
-      if (!val.weightLb || val.weightLb <= 0) {
+      if (!val.weight.lb || val.weight.lb <= 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Weight (lb) is required",
-          path: ["weightLb"],
+          path: ["weight", "lb"],
         });
       }
     } else {
-      if (!val.heightCm || val.heightCm <= 0) {
+      if (!val.height.cm || val.height.cm <= 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Height (cm) is required",
-          path: ["heightCm"],
+          path: ["height", "cm"],
         });
       }
-      if (!val.weightKg || val.weightKg <= 0) {
+      if (!val.weight.kg || val.weight.kg <= 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Weight (kg) is required",
-          path: ["weightKg"],
+          path: ["weight", "kg"],
         });
       }
     }
@@ -171,13 +175,13 @@ export function toProfileInput(v: ProfileFormValues): ProfileInput {
     ageYears: v.ageYears,
 
     height: {
-      inches: v.unitSystem === "us" ? v.heightInches : undefined,
-      cm: v.unitSystem === "metric" ? v.heightCm : undefined,
+      inches: v.unitSystem === "us" ? v.height.inches : undefined,
+      cm: v.unitSystem === "metric" ? v.height.cm : undefined,
     },
 
     weight: {
-      lb: v.unitSystem === "us" ? v.weightLb : undefined,
-      kg: v.unitSystem === "metric" ? v.weightKg : undefined,
+      lb: v.unitSystem === "us" ? v.weight.lb : undefined,
+      kg: v.unitSystem === "metric" ? v.weight.kg : undefined,
     },
 
     bodyFatMode: v.bodyFatMode,
