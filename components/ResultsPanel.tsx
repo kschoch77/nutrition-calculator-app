@@ -39,8 +39,8 @@ function MacroCard({
       <div className="mt-4 space-y-3">
         <div className="grid grid-cols-3 gap-3">
           <div className="rounded-xl bg-gray-50 p-3">
-            <div className="text-xs text-gray-600">Protein</div>
-            <div className="mt-1 text-lg font-semibold tabular-nums">
+            <div className="text-xs text-gray-700">Protein</div>
+            <div className="mt-1 text-xl font-semibold text-gray-900 tabular-nums">
               {fmtInt(data.proteinG)}g
             </div>
             <div className="text-xs text-gray-600 tabular-nums">
@@ -49,8 +49,8 @@ function MacroCard({
           </div>
 
           <div className="rounded-xl bg-gray-50 p-3">
-            <div className="text-xs text-gray-600">Fat</div>
-            <div className="mt-1 text-lg font-semibold tabular-nums">
+            <div className="text-xs text-gray-700">Fat</div>
+            <div className="mt-1 text-xl font-semibold text-gray-900 tabular-nums">
               {fmtInt(data.fatG)}g
             </div>
             <div className="text-xs text-gray-600 tabular-nums">
@@ -59,8 +59,8 @@ function MacroCard({
           </div>
 
           <div className="rounded-xl bg-gray-50 p-3">
-            <div className="text-xs text-gray-600">Carbs</div>
-            <div className="mt-1 text-lg font-semibold tabular-nums">
+            <div className="text-xs text-gray-700">Carbs</div>
+            <div className="mt-1 text-xl font-semibold text-gray-900 tabular-nums">
               {fmtInt(data.carbsG)}g
             </div>
             <div className="text-xs text-gray-600 tabular-nums">
@@ -113,15 +113,15 @@ export function ResultsPanel({
           <div className="rounded-2xl border p-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl bg-gray-50 p-3">
-                <div className="text-xs text-gray-600">Recommended BMR</div>
-                <div className="mt-1 text-xl font-semibold tabular-nums">
+                <div className="text-xs text-gray-700">Recommended BMR</div>
+                <div className="mt-1 text-2xl font-semibold text-gray-900 tabular-nums">
                   {fmtInt(results.bmr.recommendedBmr)} kcal
                 </div>
               </div>
 
               <div className="rounded-xl bg-gray-50 p-3">
-                <div className="text-xs text-gray-600">TDEE</div>
-                <div className="mt-1 text-xl font-semibold tabular-nums">
+                <div className="text-xs text-gray-700">TDEE</div>
+                <div className="mt-1 text-2xl font-semibold text-gray-900 tabular-nums">
                   {fmtInt(results.tdee)} kcal
                 </div>
               </div>
