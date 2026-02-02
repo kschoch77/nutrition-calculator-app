@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -26,7 +26,7 @@ const ACTIVITY_PRESETS = [
 ];
 
 export function ProfileForm({ initialValues, onChange }: Props) {
-  const form = useForm<ProfileFormValues>({
+  const form = useForm({
     resolver: zodResolver(profileFormSchema),
     mode: "onChange",
     defaultValues: {
@@ -34,8 +34,8 @@ export function ProfileForm({ initialValues, onChange }: Props) {
       sex: "male",
       ageYears: 30,
 
-      heightInches: 70,
-      weightLb: 180,
+      height: { inches: 70 },
+      weight: { lb: 180 },
 
       bodyFatMode: "unknown",
       bodyFatPercent: undefined,
@@ -55,7 +55,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
       dexaLeanMassKg: undefined,
 
       ...initialValues,
-    },
+    } satisfies ProfileFormValues,
   });
 
   const { register, watch, formState, setValue, getValues } = form;
@@ -63,8 +63,8 @@ export function ProfileForm({ initialValues, onChange }: Props) {
 
   const unitSystem = watch("unitSystem");
   const bodyFatMode = watch("bodyFatMode");
-  const activityUseCustom = watch("activityUseCustom");
-  const dexaEnabled = watch("dexaEnabled");
+  const activityUseCustom = !!watch("activityUseCustom");
+  const dexaEnabled = !!watch("dexaEnabled");
 
   // Live-calculate: when the form becomes valid, push ProfileInput upward
   useEffect(() => {
@@ -82,17 +82,23 @@ export function ProfileForm({ initialValues, onChange }: Props) {
   useEffect(() => {
     if (unitSystem === "us") {
       // Clear metric fields
-      setValue("heightCm", undefined);
-      setValue("weightKg", undefined);
+      setValue("height.cm", undefined);
+      setValue("weight.kg", undefined);
     } else {
       // Clear us fields
-      setValue("heightInches", undefined);
-      setValue("weightLb", undefined);
+      setValue("height.inches", undefined);
+      setValue("weight.lb", undefined);
     }
   }, [unitSystem, setValue]);
 
-  const FieldError = ({ name }: { name: keyof ProfileFormValues }) => {
-    const msg = errors[name]?.message;
+  const FieldError = ({ name }: { name: FieldPath<ProfileFormValues> }) => {
+    const leaf = name
+      .split(".")
+      .reduce(
+        (acc, key) => (acc && typeof acc === "object" ? (acc as any)[key] : undefined),
+        errors as unknown,
+      ) as any;
+    const msg = leaf?.message;
     if (!msg) return null;
     return <div className="mt-1 text-xs text-red-600">{String(msg)}</div>;
   };
@@ -141,48 +147,48 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               <label className="space-y-1">
                 <div className="text-sm font-medium">Height (inches)</div>
                 <input
-                  className="w-full rounded-xl border px-3 py-2"
-                  type="number"
-                  step="0.1"
-                  {...register("heightInches", { valueAsNumber: true })}
-                />
-                <FieldError name="heightInches" />
-              </label>
+              className="w-full rounded-xl border px-3 py-2"
+              type="number"
+              step="0.1"
+              {...register("height.inches", { valueAsNumber: true })}
+            />
+            <FieldError name="height.inches" />
+          </label>
 
               <label className="space-y-1">
                 <div className="text-sm font-medium">Weight (lb)</div>
                 <input
-                  className="w-full rounded-xl border px-3 py-2"
-                  type="number"
-                  step="0.1"
-                  {...register("weightLb", { valueAsNumber: true })}
-                />
-                <FieldError name="weightLb" />
-              </label>
+              className="w-full rounded-xl border px-3 py-2"
+              type="number"
+              step="0.1"
+              {...register("weight.lb", { valueAsNumber: true })}
+            />
+            <FieldError name="weight.lb" />
+          </label>
             </>
           ) : (
             <>
               <label className="space-y-1">
                 <div className="text-sm font-medium">Height (cm)</div>
                 <input
-                  className="w-full rounded-xl border px-3 py-2"
-                  type="number"
-                  step="0.1"
-                  {...register("heightCm", { valueAsNumber: true })}
-                />
-                <FieldError name="heightCm" />
-              </label>
+              className="w-full rounded-xl border px-3 py-2"
+              type="number"
+              step="0.1"
+              {...register("height.cm", { valueAsNumber: true })}
+            />
+            <FieldError name="height.cm" />
+          </label>
 
               <label className="space-y-1">
                 <div className="text-sm font-medium">Weight (kg)</div>
                 <input
-                  className="w-full rounded-xl border px-3 py-2"
-                  type="number"
-                  step="0.1"
-                  {...register("weightKg", { valueAsNumber: true })}
-                />
-                <FieldError name="weightKg" />
-              </label>
+              className="w-full rounded-xl border px-3 py-2"
+              type="number"
+              step="0.1"
+              {...register("weight.kg", { valueAsNumber: true })}
+            />
+            <FieldError name="weight.kg" />
+          </label>
             </>
           )}
         </div>
@@ -331,7 +337,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               step={25}
               {...register("cutDelta", { valueAsNumber: true })}
             />
-            <div className="text-xs text-gray-600">{watch("cutDelta")} kcal/day</div>
+            <div className="text-xs text-gray-600">{Number(watch("cutDelta") ?? 0)} kcal/day</div>
             <FieldError name="cutDelta" />
           </label>
 
@@ -345,7 +351,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               step={25}
               {...register("bulkDelta", { valueAsNumber: true })}
             />
-            <div className="text-xs text-gray-600">{watch("bulkDelta")} kcal/day</div>
+            <div className="text-xs text-gray-600">{Number(watch("bulkDelta") ?? 0)} kcal/day</div>
             <FieldError name="bulkDelta" />
           </label>
 
@@ -359,7 +365,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               step={25}
               {...register("recompDelta", { valueAsNumber: true })}
             />
-            <div className="text-xs text-gray-600">{watch("recompDelta")} kcal/day</div>
+            <div className="text-xs text-gray-600">{Number(watch("recompDelta") ?? 0)} kcal/day</div>
             <FieldError name="recompDelta" />
           </label>
 
@@ -373,7 +379,7 @@ export function ProfileForm({ initialValues, onChange }: Props) {
               step={0.05}
               {...register("bulkProteinGPerLb", { valueAsNumber: true })}
             />
-            <div className="text-xs text-gray-600">{Number(watch("bulkProteinGPerLb")).toFixed(2)} g/lb</div>
+            <div className="text-xs text-gray-600">{Number(watch("bulkProteinGPerLb") ?? 0).toFixed(2)} g/lb</div>
             <FieldError name="bulkProteinGPerLb" />
           </label>
         </div>
